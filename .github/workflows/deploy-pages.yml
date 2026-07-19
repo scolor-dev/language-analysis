@@ -30,14 +30,12 @@ jobs:
         run: |
           set -euo pipefail
           node --check app.js
-          node --check image-utils.js
           test -s index.html
           test -s styles.css
-          test -s image-utils.js
           test -s assets/kana-chart.png
 
           mkdir -p _site/assets
-          cp index.html app.js styles.css image-utils.js _site/
+          cp index.html app.js styles.css _site/
           cp assets/kana-chart.png _site/assets/
           touch _site/.nojekyll
 
