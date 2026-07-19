@@ -202,10 +202,8 @@ function detectCharacterBoxes(templates) {
 
   const low = histogramPercentile(histogram, width * height, .01);
   const paper = histogramPercentile(histogram, width * height, .9);
-  const otsu = otsuThreshold(histogram, width * height);
-  const threshold = Math.min(otsu, low + (paper - low) * .48);
-  const adaptiveMask = imageUtils.buildAdaptiveThresholdMask(grayscale, width, height, { windowSize: Math.max(15, Math.round(Math.min(width, height) / 18)) });
-  const mask = imageUtils.mergeDetectionMasks(grayscale, width, height, adaptiveMask, threshold, 10);
+  const threshold = Math.min(otsuThreshold(histogram, width * height), low + (paper - low) * .48);
+  const mask = Uint8Array.from(grayscale, value => value < threshold ? 1 : 0);
   const cleaned = closeBinaryMask(mask, width, height);
   const components = connectedComponentsRect(cleaned, width, height);
   const minDimension = Math.max(8, Math.min(width, height) * .009);
