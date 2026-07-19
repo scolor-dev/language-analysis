@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f4f0e8">
+  <title>いきもの文字 翻訳器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <p class="eyebrow">PHOTO → KANA</p>
+    <h1>いきもの文字<br><span>翻訳器</span></h1>
+    <p class="lead">写真の文字をひとつずつ囲むと、前面の絵と背面の記号を分けて読み取り、日本語へ変換します。</p>
+  </header>
+
+  <main>
+    <section class="panel upload-panel" aria-labelledby="upload-title">
+      <div class="step">01</div>
+      <div class="section-copy">
+        <h2 id="upload-title">写真を選ぶ</h2>
+        <p>文字が正面から、影や反射を避けて写っている写真ほど正確です。</p>
+      </div>
+      <label class="file-button">
+        写真を開く
+        <input id="photo-input" type="file" accept="image/*" capture="environment">
+      </label>
+    </section>
+
+    <section class="panel work-panel" aria-labelledby="crop-title">
+      <div class="section-heading">
+        <div class="step">02</div>
+        <div class="section-copy">
+          <h2 id="crop-title">文字を囲む</h2>
+          <p>少しの余白を含め、読む順番に1文字ずつドラッグしてください。隣の図形が端に入っても除外します。</p>
+        </div>
+      </div>
+
+      <div id="stage-placeholder" class="stage-placeholder">
+        <span class="placeholder-mark">⌗</span>
+        <span>ここに写真が表示されます</span>
+      </div>
+      <div id="stage" class="stage" hidden>
+        <canvas id="photo-canvas"></canvas>
+        <canvas id="selection-canvas"></canvas>
+      </div>
+
+      <div class="toolbar">
+        <button id="undo-button" class="quiet-button" disabled>ひとつ戻す</button>
+        <button id="clear-button" class="quiet-button" disabled>すべて消す</button>
+        <label class="order-control">読み順
+          <select id="reading-order">
+            <option value="auto">自動</option>
+            <option value="horizontal-ltr">横：左→右</option>
+            <option value="horizontal-rtl">横：右→左</option>
+            <option value="vertical-rtl">縦：上→下・右列から</option>
+          </select>
+        </label>
+        <button id="auto-detect-button" class="auto-button" disabled>文字を自動検出</button>
+        <button id="recognize-button" class="primary-button" disabled>囲んだ文字を読む</button>
+      </div>
+    </section>
+
+    <section class="panel result-panel" aria-labelledby="result-title">
+      <div class="section-heading">
+        <div class="step">03</div>
+        <div class="section-copy">
+          <h2 id="result-title">読み取り結果</h2>
+          <p>90%以上は確定、最高が80%以上なら80%以上をすべて、それ未満は上位3候補を表示します。</p>
+        </div>
+      </div>
+
+      <div id="recognition-list" class="recognition-list">
+        <p class="empty-result">まだ読み取っていません。</p>
+      </div>
+
+      <div class="separator-tools">
+        <button type="button" data-insert=" ">＋ 空白</button>
+        <button type="button" data-insert="\n">＋ 改行</button>
+      </div>
+
+      <label class="translation-label" for="translation">日本語</label>
+      <textarea id="translation" rows="4" placeholder="読み取り結果がここに表示されます"></textarea>
+      <button id="copy-button" class="copy-button">結果をコピー</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </section>
+
+    <details class="chart-panel">
+      <summary>使用している50音対応表を見る</summary>
+      <img src="assets/kana-chart.png" alt="いきもの文字の50音対応表">
+    </details>
+  </main>
+
+  <footer>判定はこの端末のブラウザ内だけで行われ、写真は送信されません。</footer>
+  <script src="app.js"></script>
+</body>
+</html>
